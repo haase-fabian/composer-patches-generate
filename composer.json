@@ -1,0 +1,32 @@
+{
+  "name": "fhaase/composer-patches-generate",
+  "type": "library",
+  "description": "Command to create composer patches via cli",
+  "version": "v0.1.0",
+  "keywords": [
+    "composer-patches"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Fabian Haase"
+    }
+  ],
+  "bin": [
+    "bin/composer-patches-generate"
+  ],
+  "require": {
+    "php": ">=8.0",
+    "symfony/process": ">=5.4",
+    "symfony/console": ">=5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "FHaase\\ComposerPatchesGenerate\\": "src"
+    }
+  },
+  "prefer-stable": true,
+  "suggest": {
+    "cweagans/composer-patches": "To apply patches during composer install"
+  }
+}

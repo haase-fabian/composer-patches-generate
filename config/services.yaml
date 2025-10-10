@@ -1,0 +1,4 @@
+services:
+  .fhaase_composer_patches.generate_command:
+    class: FHaase\ComposerPatchesGenerate\Command\ComposerPatchesGenerateCommand
+    tags: ['console.command']
