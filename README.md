@@ -1,6 +1,8 @@
-# Composer Patches Generate Command
+# Composer Patches Generate
+## Introduction
+A standalone command-line utility to generate patches for [cweagans/composer-patches](https://docs.cweagans.net/composer-patches/).
 
-Generate .patch files with a single command.
+Effortlessly capture local modifications to Composer dependencies, commit them to your project, and ensure your custom fixes are reliably applied across all environments during `composer install`.
 
 ## Install
 Make sure `git` and `find` are installed.
@@ -13,7 +15,7 @@ find --version
 ```
 
 ```shell
-composer require --dev fhaase/composer-patches-command
+composer require --dev fhaase/composer-patches-generate
 
 # Recommended to apply patches on install
 composer require cweagans/composer-patches
@@ -38,9 +40,10 @@ composer require cweagans/composer-patches
       "extra": {
           "patches": {
               "vendor/example": {
-                  "description": "patches/vendor_example/UserFactory.patch"
+                  "<description>": "patches/vendor_example/UserFactory.patch"
               }
           }
       }
    }
    ```
+5. Repeat Step 3 to update the patches when further changes are necessary. 

@@ -2,7 +2,6 @@
   "name": "fhaase/composer-patches-generate",
   "type": "library",
   "description": "Command to create composer patches via cli",
-  "version": "v0.1.0",
   "keywords": [
     "composer-patches"
   ],
@@ -18,7 +17,8 @@
   "require": {
     "php": ">=8.0",
     "symfony/process": ">=5.4",
-    "symfony/console": ">=5.4"
+    "symfony/console": ">=5.4",
+    "symfony/polyfill-php84": "^1.33"
   },
   "autoload": {
     "psr-4": {

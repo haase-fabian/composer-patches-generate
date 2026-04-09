@@ -23,7 +23,8 @@ foreach ($possibleAutoloadPaths as $possibleAutoloadPath) {
 
 
 $application = new Application('Composer Patches Commands', '1.0.0');
-$application->add(new ComposerPatchesGenerateCommand());
+$addMethod = method_exists($application, 'addCommand') ? 'addCommand' : 'add';
+$application->{$addMethod}(new ComposerPatchesGenerateCommand());
 $application->setDefaultCommand('composer-patches:generate', true);
 $statusCode = $application->run();
 exit($statusCode);
