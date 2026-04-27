@@ -4,7 +4,6 @@ namespace FHaase\ComposerPatchesGenerate\Command;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -28,7 +27,7 @@ class ComposerPatchesGenerateCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('package', InputArgument::REQUIRED, 'composer package name with patch to create')
+            ->addOption('package', "p", InputOption::VALUE_OPTIONAL, 'composer package name with patch to create')
             ->addOption('patches-folder', null, InputOption::VALUE_OPTIONAL, 'customize folder in which patches are generated', "patches");
     }
 
@@ -36,7 +35,30 @@ class ComposerPatchesGenerateCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $this->io = $io;
-        $package = $input->getArgument('package');
+
+        Process::fromShellCommandline("composer config vendor-dir --quiet")
+            ->run(function ($type, $buffer) use (&$vendorDir) { $vendorDir = trim($buffer); });
+
+        if (!$package = $input->getOption('package')) {
+            $packages = [];
+            Process::fromShellCommandline("find * -type f -name '*.old'", $vendorDir)
+                ->run(function ($type, $buffer) use (&$packages) {
+                    $packages = preg_replace("|^([^/]+/[^/]+)/.*$|", "$1", explode(PHP_EOL, $buffer));
+                });
+            $packages = array_unique(array_filter($packages));
+
+            if (empty($packages)) {
+                $io->warning([
+                    "No patches in \"$vendorDir\" found!",
+                    "Keep the original file with suffix '.old' alongside the changed file."
+                ]);
+
+                return Command::FAILURE;
+            }
+
+            $package = $io->choice("Select package to generate patches from", $packages, $packages[0]);
+        }
+
         $rootFolder = $input->getOption('patches-folder');
         $patchesFolder = "$rootFolder/" . str_replace('/', '_', $package);
 
